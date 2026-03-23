@@ -1,7 +1,24 @@
 ---
 ---
 
-@import "jekyll-theme-chirpy";
+/* prettier-ignore */
+@use 'main
+{%- if jekyll.environment == 'production' -%}
+  .bundle
+{%- endif -%}
+';
 
-/* Import your custom styles after the theme */
-@import "custom";
+/* append your custom style below */
+:root {
+  --sidebar-bg: #2c3e50;
+  --sidebar-muted-color: #bdc3c7;
+  --sidebar-active-color: #ffffff;
+  --sidebar-border-color: #34495e;
+}
+
+[data-mode="dark"] {
+  --sidebar-bg: #1a2632;
+  --sidebar-muted-color: #95a5a6;
+  --sidebar-active-color: #ecf0f1;
+  --sidebar-border-color: #2c3e50;
+}
