@@ -1,0 +1,36 @@
+---
+---
+
+@use 'main
+{%- if jekyll.environment == 'production' -%}
+  .bundle
+{%- endif -%}
+';
+
+/* YOUR CUSTOM STYLES GO HERE - DO NOT MODIFY THE @use LINE ABOVE */
+:root {
+  --sidebar-bg: #0a3444 !important;
+  --sidebar-muted-color: #ffffff !important;
+  --sidebar-active-color: #ffffff !important;
+  --sidebar-border-color: #2740a0 !important;
+}
+
+[data-mode="dark"] {
+  --sidebar-bg: #0a3444 !important;
+  --sidebar-muted-color: #ffffff !important;
+  --sidebar-active-color: #ffffff !important;
+  --sidebar-border-color: #2740a0 !important;
+}
+
+#sidebar .site-title,
+#sidebar .site-subtitle,
+#sidebar .nav-link {
+  color: var(--sidebar-muted-color) !important;
+}
+
+#sidebar .nav-item.active .nav-link,
+#sidebar .nav-link:hover,
+#sidebar .site-title:hover,
+#sidebar .site-subtitle:hover {
+  color: var(--sidebar-active-color) !important;
+}
