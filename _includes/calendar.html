@@ -1,0 +1,47 @@
+<div class="google-calendar-widget" markdown="1">
+  <h3 class="panel-heading">Calendar</h3>
+  <div class="calendar-desktop">
+      <iframe src="https://calendar.google.com/calendar/embed?src=408c54c5483208e82d01dec30a088ede7c00ab95f7ec06abfa371b95cc051b0d%40group.calendar.google.com&ctz=UTC&showPrint=0&showTz=0&showTabs=0&showTitle=0&showNav=0&showCalendars=0" style="border: 0" width="100%" height="100%" frameborder="0" scrolling="no"></iframe>
+  </div>
+  
+  <div class="calendar-mobile">
+      <iframe src="https://calendar.google.com/calendar/embed?src=408c54c5483208e82d01dec30a088ede7c00ab95f7ec06abfa371b95cc051b0d%40group.calendar.google.com&ctz=UTC&showPrint=0&showTz=0&showTabs=0&showTitle=0&showNav=0&showCalendars=0&mode=AGENDA" style="border: 0" width="100%" height="100%" frameborder="0" scrolling="no"></iframe>
+  </div>
+</div>
+
+<style>
+  .calendar-desktop {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 550px;
+  }
+  
+  .calendar-mobile {
+    display: none;
+  }
+  @media (max-width: 768px) {
+    .calendar-desktop {
+      display: none;
+    }
+    
+    .calendar-mobile {
+      display: block;
+      position: relative;
+      width: 100%;
+      height: 600px;
+    }
+  }
+  .calendar-desktop iframe,
+  .calendar-mobile iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+  }
+  .calendar-desktop,
+  .calendar-mobile {
+    position: relative;
+  }
+</style>
