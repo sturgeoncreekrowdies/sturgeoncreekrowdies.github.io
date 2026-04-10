@@ -25,7 +25,7 @@ README
 ## 2. Adding a Blog Post
 
 1. Open any text editor (Notepad etc.) and copy this template in to your file:
-'''
+```
 ---
 title: "My Title"
 date: YYYY-MM-DD
@@ -36,7 +36,7 @@ tags: [practice, social] This whole line is optional, delete if not using.
 ![Photo description]({{ '/assets/img/photos/YOUR-FILENAME.jpg' | relative_url }}) If you want to embed a photo
 
 TEXT GOES HERE
-'''
+```
 
 2. Save the file and name it exactly like this: `YYYY-MM-DD-your-title-here.md`
    - Example: `2024-04-10-our-amazing-trip.md`
@@ -48,7 +48,7 @@ TEXT GOES HERE
    - Example: `2024-04-10-hof-team-photo.jpg`
 2. Upload your photo to: `assets/img/photos/`
 3. 1. Open any text editor (Notepad etc.) and copy this template in to your file:
-'''
+```
 ---
 title: "My Title"
 date: YYYY-MM-DD
@@ -62,7 +62,7 @@ external_link: "https://yourlink"
 TEXT GOES HERE
 
 [Read more →]({{ page.external_link }})
-'''
+```
 
 ## License
 
