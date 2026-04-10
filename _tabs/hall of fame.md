@@ -20,13 +20,11 @@ order: 3
 </div>
 
 <script>
-  // Get all Hall of Fame posts (those with 'hof' in filename and category)
   const hofPosts = [
     {% for post in site.posts %}
       {% if post.categories contains "hall-of-fame" or post.path contains "hof" %}
         {% assign filename = post.path | split: '/' | last %}
         {% assign year = post.date | date: "%Y" %}
-        {% comment %} Extract image name from post content or use front matter {% endcomment %}
         {% assign image_name = post.path | replace: '.md', '.jpg' | replace: '_posts/', '' %}
         {
           url: "{{ post.url }}",
@@ -48,10 +46,8 @@ order: 3
   if (hofPosts.length === 0) {
     grid.innerHTML = '<div class="no-posts">No Hall of Fame posts yet. Create a post with "hof" in the filename!</div>';
   } else {
-    // Get unique years
     const years = [...new Set(hofPosts.map(p => p.year))].sort().reverse();
     
-    // Add year buttons
     years.forEach(year => {
       const btn = document.createElement('button');
       btn.className = 'filter-btn';
@@ -60,14 +56,12 @@ order: 3
       filterBar.appendChild(btn);
     });
     
-    // Display all Hall of Fame entries
     hofPosts.forEach(post => {
       const item = document.createElement('a');
       item.className = 'hof-item';
       item.setAttribute('data-year', post.year);
       item.href = post.url;
       
-      // Try to load image, show placeholder if not found
       const img = document.createElement('img');
       img.src = post.image;
       img.alt = post.title;
@@ -90,17 +84,14 @@ order: 3
       grid.appendChild(item);
     });
     
-    // Filter functionality
     const filterBtns = document.querySelectorAll('.filter-btn');
     filterBtns.forEach(btn => {
       btn.addEventListener('click', function() {
         const year = this.getAttribute('data-year');
         
-        // Update active button
         filterBtns.forEach(b => b.classList.remove('active'));
         this.classList.add('active');
         
-        // Filter items
         const items = document.querySelectorAll('.hof-item');
         items.forEach(item => {
           if (year === 'all' || item.getAttribute('data-year') === year) {
