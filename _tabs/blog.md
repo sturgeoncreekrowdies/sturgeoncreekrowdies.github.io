@@ -27,7 +27,6 @@ title: Blog
 <div id="pagination-controls" style="text-align: center; margin-top: 2rem;"></div>
 
 <script>
-  // Get all posts
   const posts = Array.from(document.querySelectorAll('.post-item'));
   const postsPerPage = 5;
   let currentPage = 1;
@@ -36,20 +35,16 @@ title: Blog
     const start = (page - 1) * postsPerPage;
     const end = start + postsPerPage;
     
-    // Hide all posts first
     posts.forEach(post => {
       post.style.display = 'none';
     });
     
-    // Show only posts for current page
     for (let i = start; i < end && i < posts.length; i++) {
       posts[i].style.display = 'block';
     }
     
-    // Update pagination buttons
     updatePaginationButtons();
     
-    // Scroll to top of posts
     document.getElementById('posts-container').scrollIntoView({ behavior: 'smooth' });
   }
   
@@ -64,17 +59,14 @@ title: Blog
     
     let html = '<div style="display: inline-block;">';
     
-    // Previous button
     if (currentPage > 1) {
       html += `<button onclick="changePage(${currentPage - 1})" style="margin-right: 1rem; padding: 0.5rem 1rem; cursor: pointer;">&laquo; Newer</button>`;
     } else {
       html += `<button disabled style="margin-right: 1rem; padding: 0.5rem 1rem; opacity: 0.5;">&laquo; Newer</button>`;
     }
     
-    // Page indicator
     html += `<span style="margin: 0 1rem;">Page ${currentPage} of ${totalPages}</span>`;
     
-    // Next button
     if (currentPage < totalPages) {
       html += `<button onclick="changePage(${currentPage + 1})" style="margin-left: 1rem; padding: 0.5rem 1rem; cursor: pointer;">Older &raquo;</button>`;
     } else {
@@ -90,7 +82,6 @@ title: Blog
     showPage(currentPage);
   }
   
-  // Initialize - show first page when page loads
   document.addEventListener('DOMContentLoaded', function() {
     showPage(1);
   });
@@ -98,6 +89,6 @@ title: Blog
 
 <style>
   .post-item {
-    display: none;  /* Hide all posts initially */
+    display: none;
   }
 </style>
