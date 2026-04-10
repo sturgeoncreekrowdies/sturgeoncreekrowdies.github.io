@@ -1,4 +1,4 @@
 ---
-icon: fas fa-stream
+icon: fas fa-trophy
 order: 3
 ---
