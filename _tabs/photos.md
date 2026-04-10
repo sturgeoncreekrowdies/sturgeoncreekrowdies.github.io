@@ -14,7 +14,6 @@ permalink: /photos/
 </div>
 
 <script>
-  // Get all photos from the assets/img/photos directory
   const allPhotos = [
     {% for file in site.static_files %}
       {% if file.path contains 'assets/img/photos' %}
@@ -32,17 +31,14 @@ permalink: /photos/
   console.log('Found photos:', allPhotos.length);
   console.log('Photo data:', allPhotos);
 
-  // Build the gallery
   const gallery = document.getElementById('gallery-grid');
   const filterBar = document.getElementById('filter-bar');
   
   if (allPhotos.length === 0) {
     gallery.innerHTML = '<div class="no-photos">No photos found in assets/img/photos/</div>';
   } else {
-    // Get unique years
     const years = [...new Set(allPhotos.map(p => p.year))].sort().reverse();
     
-    // Add year buttons
     years.forEach(year => {
       const btn = document.createElement('button');
       btn.className = 'filter-btn';
@@ -51,7 +47,6 @@ permalink: /photos/
       filterBar.appendChild(btn);
     });
     
-    // Display all photos
     allPhotos.forEach(photo => {
       const item = document.createElement('div');
       item.className = 'gallery-item';
@@ -75,17 +70,14 @@ permalink: /photos/
       gallery.appendChild(item);
     });
     
-    // Filter functionality
     const filterBtns = document.querySelectorAll('.filter-btn');
     filterBtns.forEach(btn => {
       btn.addEventListener('click', function() {
         const year = this.getAttribute('data-year');
         
-        // Update active button
         filterBtns.forEach(b => b.classList.remove('active'));
         this.classList.add('active');
         
-        // Filter items
         const items = document.querySelectorAll('.gallery-item');
         items.forEach(item => {
           if (year === 'all' || item.getAttribute('data-year') === year) {
