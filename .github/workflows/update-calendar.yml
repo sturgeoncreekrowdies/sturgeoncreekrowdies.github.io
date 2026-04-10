@@ -1,0 +1,114 @@
+name: Update Calendar Events
+
+on:
+  schedule:
+    # Update every 6 hours
+    - cron: '0 */6 * * *'
+  # Allow manual trigger from GitHub Actions tab
+  workflow_dispatch:
+
+jobs:
+  fetch-calendar:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Fetch Google Calendar
+        run: |
+          # Your Google Calendar public iCal URL
+          CALENDAR_URL= "https://calendar.google.com/calendar/ical/408c54c5483208e82d01dec30a088ede7c00ab95f7ec06abfa371b95cc051b0d%40group.calendar.google.com/public/basic.ics"
+          
+          # Download the calendar
+          curl -L "$CALENDAR_URL" -o calendar.ics
+          echo "Downloaded calendar.ics"
+      
+      - name: Parse calendar to JSON
+        run: |
+          python3 << 'EOF'
+          import re
+          import json
+          from datetime import datetime
+          
+          def parse_ical(ics_file):
+              with open(ics_file, 'r', encoding='utf-8') as f:
+                  content = f.read()
+              
+              events = []
+              # Find all VEVENT blocks
+              event_pattern = r'BEGIN:VEVENT(.*?)END:VEVENT'
+              for match in re.finditer(event_pattern, content, re.DOTALL):
+                  event_data = match.group(1)
+                  
+                  # Extract title
+                  title_match = re.search(r'SUMMARY:(.*?)\n', event_data)
+                  if not title_match:
+                      continue
+                  title = title_match.group(1).strip()
+                  
+                  # Extract date (format: DTSTART;VALUE=DATE:20241225)
+                  date_match = re.search(r'DTSTART;VALUE=DATE:(\d{4})(\d{2})(\d{2})', event_data)
+                  if not date_match:
+                      # Try alternative format
+                      date_match = re.search(r'DTSTART:(\d{4})(\d{2})(\d{2})', event_data)
+                  
+                  if date_match:
+                      year, month, day = date_match.groups()
+                      date_str = f"{month}/{day}/{year}"
+                      
+                      # Only include future events
+                      event_date = datetime(int(year), int(month), int(day))
+                      if event_date >= datetime.now():
+                          events.append({
+                              'title': title,
+                              'date': date_str,
+                              'timestamp': event_date.isoformat()
+                          })
+                  else:
+                      # Events without dates (less common)
+                      events.append({
+                          'title': title,
+                          'date': 'TBD',
+                          'timestamp': '9999-12-31'
+                      })
+              
+              # Sort by date
+              events.sort(key=lambda x: x['timestamp'])
+              return events[:10]  # Keep next 10 events
+          
+          # Parse and save
+          events = parse_ical('calendar.ics')
+          
+          # Save as JSON
+          with open('_data/calendar.json', 'w', encoding='utf-8') as f:
+              json.dump(events, f, indent=2)
+          
+          print(f"Saved {len(events)} upcoming events")
+          
+          # Also create a simple YAML version for Liquid templates
+          import yaml
+          with open('_data/calendar.yml', 'w', encoding='utf-8') as f:
+              yaml.dump(events, f, allow_unicode=True)
+          
+          EOF
+      
+      - name: Install Python YAML library (if needed)
+        run: pip3 install pyyaml
+      
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Check if there are changes to commit
+          if git diff --quiet _data/; then
+            echo "No changes to calendar data"
+          else
+            git add _data/calendar.json _data/calendar.yml
+            git commit -m "Update calendar events [skip ci]"
+            git push
+            echo "Pushed calendar updates"
+          fi
