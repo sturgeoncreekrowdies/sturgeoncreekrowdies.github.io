@@ -17,22 +17,16 @@ jobs:
       
       - name: Fetch and parse Google Calendar
         run: |
-          # Your Google Calendar public iCal URL
+          # Google Calendar URL
           CALENDAR_URL="https://calendar.google.com/calendar/ical/408c54c5483208e82d01dec30a088ede7c00ab95f7ec06abfa371b95cc051b0d%40group.calendar.google.com/public/basic.ics"
           
-          # Download the calendar
           curl -L "$CALENDAR_URL" -o calendar.ics
-          echo "✅ Downloaded calendar.ics"
+          # echo "Downloaded calendar.ics"
           
-          # Parse using bash with date filtering
           cat > parse_calendar.sh << 'SCRIPT'
           #!/bin/bash
           
-          mkdir -p _data
-          
-          # Get today's date in YYYYMMDD format for comparison
           today=$(date +%Y%m%d)
-          echo "Today's date: $today"
           
           echo "[" > _data/calendar.json
           
@@ -42,14 +36,12 @@ jobs:
           first_event=true
           
           while IFS= read -r line; do
-            # Capture event title
             if [[ $line == SUMMARY:* ]]; then
               current_title="${line#SUMMARY:}"
               current_title="${current_title#"${current_title%%[![:space:]]*}"}"
               current_title="${current_title%"${current_title##*[![:space:]]}"}"
             fi
             
-            # Capture date in raw format for comparison
             if [[ $line =~ DTSTART(:|;VALUE=DATE:)([0-9]{4})([0-9]{2})([0-9]{2}) ]]; then
               year="${BASH_REMATCH[2]}"
               month="${BASH_REMATCH[3]}"
@@ -58,9 +50,7 @@ jobs:
               current_date_raw="${year}${month}${day}"
             fi
             
-            # When we have both title and date, check if it's future or today
             if [[ -n "$current_title" && -n "$current_date" && -n "$current_date_raw" ]]; then
-              # Only include if date is today or in the future
               if [[ $current_date_raw -ge $today ]]; then
                 if [ "$first_event" = true ]; then
                   first_event=false
@@ -68,7 +58,6 @@ jobs:
                   echo "," >> _data/calendar.json
                 fi
                 
-                # Escape double quotes and backslashes in title
                 escaped_title=$(echo "$current_title" | sed 's/\\/\\\\/g' | sed 's/"/\\"/g')
                 
                 echo "  {" >> _data/calendar.json
@@ -76,12 +65,11 @@ jobs:
                 echo "    \"date\": \"$current_date\"" >> _data/calendar.json
                 echo -n "  }" >> _data/calendar.json
                 
-                echo "  ✓ Included: $current_title on $current_date"
+                # echo " DEBUG $current_title on $current_date"
               else
-                echo "  ✗ Skipped (past): $current_title on $current_date"
+                # echo " DEBUG PAST $current_title on $current_date"
               fi
               
-              # Reset for next event
               current_title=""
               current_date=""
               current_date_raw=""
@@ -92,7 +80,7 @@ jobs:
           echo "]" >> _data/calendar.json
           
           echo ""
-          echo "✅ Created _data/calendar.json"
+          # echo "completed pull"
           SCRIPT
           
           chmod +x parse_calendar.sh
@@ -107,9 +95,9 @@ jobs:
             if grep -q "title" _data/calendar.json; then
               git add _data/calendar.json
               git diff --quiet && git diff --staged --quiet || (git commit -m "Update calendar events [skip ci]" && git push)
-              echo "✅ Calendar data updated and pushed"
+              # echo "Calendar data updated and pushed"
             else
-              echo "⚠️ No future events found in calendar"
+              # echo "No events found in calendar"
             fi
           else
             echo "❌ No calendar data generated"
