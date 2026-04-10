@@ -24,16 +24,21 @@ jobs:
           curl -L "$CALENDAR_URL" -o calendar.ics
           echo "✅ Downloaded calendar.ics"
           
-          # Parse using bash/awk (handles timed format)
+          # Parse using bash with date filtering
           cat > parse_calendar.sh << 'SCRIPT'
           #!/bin/bash
           
           mkdir -p _data
           
+          # Get today's date in YYYYMMDD format for comparison
+          today=$(date +%Y%m%d)
+          echo "Today's date: $today"
+          
           echo "[" > _data/calendar.json
           
           current_title=""
           current_date=""
+          current_date_raw=""
           first_event=true
           
           while IFS= read -r line; do
@@ -44,43 +49,50 @@ jobs:
               current_title="${current_title%"${current_title##*[![:space:]]}"}"
             fi
             
-            # Capture date - handles both formats:
-            # Format 1: DTSTART;VALUE=DATE:20260331 (all-day)
-            # Format 2: DTSTART:20260331T100000Z (timed - YOUR FORMAT)
+            # Capture date in raw format for comparison
             if [[ $line =~ DTSTART(:|;VALUE=DATE:)([0-9]{4})([0-9]{2})([0-9]{2}) ]]; then
               year="${BASH_REMATCH[2]}"
               month="${BASH_REMATCH[3]}"
               day="${BASH_REMATCH[4]}"
               current_date="$month/$day/$year"
+              current_date_raw="${year}${month}${day}"
             fi
             
-            # When we have both title and date, save the event
-            if [[ -n "$current_title" && -n "$current_date" ]]; then
-              if [ "$first_event" = true ]; then
-                first_event=false
+            # When we have both title and date, check if it's future or today
+            if [[ -n "$current_title" && -n "$current_date" && -n "$current_date_raw" ]]; then
+              # Only include if date is today or in the future
+              if [[ $current_date_raw -ge $today ]]; then
+                if [ "$first_event" = true ]; then
+                  first_event=false
+                else
+                  echo "," >> _data/calendar.json
+                fi
+                
+                # Escape double quotes and backslashes in title
+                escaped_title=$(echo "$current_title" | sed 's/\\/\\\\/g' | sed 's/"/\\"/g')
+                
+                echo "  {" >> _data/calendar.json
+                echo "    \"title\": \"$escaped_title\"," >> _data/calendar.json
+                echo "    \"date\": \"$current_date\"" >> _data/calendar.json
+                echo -n "  }" >> _data/calendar.json
+                
+                echo "  ✓ Included: $current_title on $current_date"
               else
-                echo "," >> _data/calendar.json
+                echo "  ✗ Skipped (past): $current_title on $current_date"
               fi
-              
-              # Escape double quotes and backslashes in title
-              escaped_title=$(echo "$current_title" | sed 's/\\/\\\\/g' | sed 's/"/\\"/g')
-              
-              echo "  {" >> _data/calendar.json
-              echo "    \"title\": \"$escaped_title\"," >> _data/calendar.json
-              echo "    \"date\": \"$current_date\"" >> _data/calendar.json
-              echo -n "  }" >> _data/calendar.json
               
               # Reset for next event
               current_title=""
               current_date=""
+              current_date_raw=""
             fi
           done < calendar.ics
           
           echo "" >> _data/calendar.json
           echo "]" >> _data/calendar.json
           
+          echo ""
           echo "✅ Created _data/calendar.json"
-          cat _data/calendar.json
           SCRIPT
           
           chmod +x parse_calendar.sh
@@ -92,16 +104,13 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           
           if [ -s _data/calendar.json ]; then
-            # Check if it's not just empty brackets
             if grep -q "title" _data/calendar.json; then
               git add _data/calendar.json
               git diff --quiet && git diff --staged --quiet || (git commit -m "Update calendar events [skip ci]" && git push)
               echo "✅ Calendar data updated and pushed"
             else
-              echo "⚠️ No events found in calendar"
-              cat _data/calendar.json
+              echo "⚠️ No future events found in calendar"
             fi
           else
             echo "❌ No calendar data generated"
-            exit 1
           fi
