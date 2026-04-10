@@ -1,42 +1,73 @@
-# Chirpy Starter
+# Sturgeon Creek Rowdies Rugby Club Website  
 
-[![Gem Version](https://img.shields.io/gem/v/jekyll-theme-chirpy)][gem]&nbsp;
-[![GitHub license](https://img.shields.io/github/license/cotes2020/chirpy-starter.svg?color=blue)][mit]
+A fork of Chirpy Starter.
 
-When installing the [**Chirpy**][chirpy] theme through [RubyGems.org][gem], Jekyll can only read files in the folders
-`_data`, `_layouts`, `_includes`, `_sass` and `assets`, as well as a small part of options of the `_config.yml` file
-from the theme's gem. If you have ever installed this theme gem, you can use the command
-`bundle info --path jekyll-theme-chirpy` to locate these files.
+## Quick Start Overview
 
-The Jekyll team claims that this is to leave the ball in the user’s court, but this also results in users not being
-able to enjoy the out-of-the-box experience when using feature-rich themes.
+| What you want to do | Where to put files | Special naming |
+|-------------------|-------------------|----------------|
+| Add photos to gallery | `assets/img/photos/` | `YYYY-MM-DD-description.jpg` |
+| Write a blog post | `_posts/` | `YYYY-MM-DD-title.md` |
+| Add to Hall of Fame | `_posts/` | `YYYY-MM-DD-hof-title.md` |
 
-To fully use all the features of **Chirpy**, you need to copy the other critical files from the theme's gem to your
-Jekyll site. The following is a list of targets:
+---
 
-```shell
-.
-├── _config.yml
-├── _plugins
-├── _tabs
-└── index.html
+## 1. Adding Photos to the Gallery
+
+1. Name your photo: `YYYY-MM-DD-description.jpg`
+   - Example: `2024-04-10-team-photo.jpg`
+2. Upload your photo to: `assets/img/photos/`
+
+---
+
+## 2. Adding a Blog Post
+
+1. Open any text editor (Notepad etc.) and copy this template in to your file:
+```
+---
+title: "My Title"
+date: YYYY-MM-DD
+categories: [Category] This whole line is optional, delete if not using.
+tags: [practice, social] This whole line is optional, delete if not using.
+---
+
+![Photo description]({{ '/assets/img/photos/YOUR-FILENAME.jpg' | relative_url }}) If you want to embed a photo
+
+TEXT GOES HERE
 ```
 
-To save you time, and also in case you lose some files while copying, we extract those files/configurations of the
-latest version of the **Chirpy** theme and the [CD][CD] workflow to here, so that you can start writing in minutes.
+2. Save the file and name it exactly like this: `YYYY-MM-DD-your-title-here.md`
+   - Example: `2024-04-10-our-amazing-trip.md`
+3. Upload your post to _posts
 
-## Usage
 
-Check out the [theme's docs](https://github.com/cotes2020/jekyll-theme-chirpy/wiki).
+## 3. Adding a Hall of Fame post
+1. Name your photo: `YYYY-MM-DD-hof-description.jpg`
+   - Example: `2024-04-10-hof-team-photo.jpg`
+2. Upload your photo to: `assets/img/photos/`
+3. Open any text editor (Notepad etc.) and copy this template in to your file:
+```
+---
+title: "My Title"
+date: YYYY-MM-DD
+categories: [hall-of-fame] 
+tags: [practice, social] This whole line is optional, delete if not using.
+external_link: "https://yourlink"
+---
 
-## Contributing
+![Photo description]({{ '/assets/img/photos/YOUR-FILENAME.jpg' | relative_url }}) If you want to embed a photo
 
-This repository is automatically updated with new releases from the theme repository. If you encounter any issues or want to contribute to its improvement, please visit the [theme repository][chirpy] to provide feedback.
+TEXT GOES HERE
+
+[Read more →]({{ page.external_link }})
+```
 
 ## License
 
 This work is published under [MIT][mit] License.
 
+[![Gem Version](https://img.shields.io/gem/v/jekyll-theme-chirpy)][gem]&nbsp;
+[![GitHub license](https://img.shields.io/github/license/cotes2020/chirpy-starter.svg?color=blue)][mit]
 [gem]: https://rubygems.org/gems/jekyll-theme-chirpy
 [chirpy]: https://github.com/cotes2020/jekyll-theme-chirpy/
 [CD]: https://en.wikipedia.org/wiki/Continuous_deployment
