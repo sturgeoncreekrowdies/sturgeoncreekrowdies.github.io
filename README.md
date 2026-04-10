@@ -47,7 +47,7 @@ TEXT GOES HERE
 1. Name your photo: `YYYY-MM-DD-hof-description.jpg`
    - Example: `2024-04-10-hof-team-photo.jpg`
 2. Upload your photo to: `assets/img/photos/`
-3. 1. Open any text editor (Notepad etc.) and copy this template in to your file:
+3. Open any text editor (Notepad etc.) and copy this template in to your file:
 ```
 ---
 title: "My Title"
