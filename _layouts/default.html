@@ -33,42 +33,42 @@ layout: compress
           </main>
 
           <!-- panel -->
-<aside aria-label="Panel" id="panel-wrapper" class="col-xl-3 ps-2 text-muted">
-<div class="upcoming-events-panel">
-    <div class="panel-heading">
-        <i class="far fa-calendar-alt"></i>
-        <span>Upcoming Events</span>
-    </div>
-    <div id="upcoming-events-list">
-        {% if site.data.calendar and site.data.calendar.size > 0 %}
-            {% for event in site.data.calendar limit:5 %}
-            <div style="margin-bottom: 0.75rem; padding: 0.25rem 0;">
-                <div style="font-size: 0.7rem; color: var(--text-muted-color);">
-                    {{ event.date }}
-                </div>
-                <div style="font-size: 0.8rem; line-height: 1.3;">
-                    {{ event.title | truncate: 50 }}
-                </div>
+          <aside aria-label="Panel" id="panel-wrapper" class="col-xl-3 ps-2 text-muted">
+            <div class="upcoming-events-panel">
+              <div class="panel-heading">
+                <i class="far fa-calendar-alt"></i>
+                <span>Upcoming Events</span>
+              </div>
+              <div id="upcoming-events-list">
+                {% if site.data.calendar and site.data.calendar.size > 0 %}
+                  {% for event in site.data.calendar limit:5 %}
+                  <div style="margin-bottom: 0.75rem; padding: 0.25rem 0;">
+                    <div style="font-size: 0.7rem; color: var(--text-muted-color);">
+                      {{ event.date }}
+                    </div>
+                    <div style="font-size: 0.8rem; line-height: 1.3;">
+                      {{ event.title | truncate: 50 }}
+                    </div>
+                  </div>
+                  {% endfor %}
+                {% else %}
+                  <p style="font-size: 0.8rem; color: var(--text-muted-color);">
+                    No upcoming events
+                  </p>
+                {% endif %}
+              </div>
             </div>
-            {% endfor %}
-        {% else %}
-            <p style="font-size: 0.8rem; color: var(--text-muted-color);">
-                No upcoming events
-            </p>
-        {% endif %}
-    </div>
-</div>    <!-- Existing sidebar content -->
-    <div class="access">
-        {% include_cached update-list.html lang=lang %}
-        {% include_cached trending-tags.html lang=lang %}
-    </div>
+            <div class="access">
+              {% include_cached update-list.html lang=lang %}
+              {% include_cached trending-tags.html lang=lang %}
+            </div>
 
-    {% for _include in layout.panel_includes %}
-        {% assign _include_path = _include | append: '.html' %}
-        {% include {{ _include_path }} lang=lang %}
-    {% endfor %}
-</aside>        
-	</div>
+            {% for _include in layout.panel_includes %}
+              {% assign _include_path = _include | append: '.html' %}
+              {% include {{ _include_path }} lang=lang %}
+            {% endfor %}
+          </aside>        
+	      </div>
 
         <div class="row">
           <!-- tail -->
