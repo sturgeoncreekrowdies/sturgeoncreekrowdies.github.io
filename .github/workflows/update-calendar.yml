@@ -100,5 +100,5 @@ jobs:
               # echo "No events found in calendar"
             fi
           else
-            echo "❌ No calendar data generated"
+            # echo "No calendar data generated"
           fi
