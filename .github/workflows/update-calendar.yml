@@ -18,8 +18,10 @@ jobs:
       - name: Fetch and parse Google Calendar
         run: |
           # Your Google Calendar public iCal URL
-          CALENDAR_URL="https://calendar.google.com/calendar/ical/408c54c5483208e82d01dec30a088ede7c00ab95f7ec06abfa371b95cc051b0d%40group.calendar.google.com/public/basic.ics"          
-curl -L "$CALENDAR_URL" -o calendar.ics
+          CALENDAR_URL="https://calendar.google.com/calendar/ical/408c54c5483208e82d01dec30a088ede7c00ab95f7ec06abfa371b95cc051b0d%40group.calendar.google.com/public/basic.ics"
+          
+          # Download the calendar
+          curl -L "$CALENDAR_URL" -o calendar.ics
           echo "✅ Downloaded calendar.ics"
           
           # Parse using bash/awk (handles timed format)
