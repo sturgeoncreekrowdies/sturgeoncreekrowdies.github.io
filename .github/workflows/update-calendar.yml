@@ -66,8 +66,6 @@ jobs:
                 echo -n "  }" >> _data/calendar.json
                 
                 # echo " DEBUG $current_title on $current_date"
-              else
-                # echo " DEBUG PAST $current_title on $current_date"
               fi
               
               current_title=""
