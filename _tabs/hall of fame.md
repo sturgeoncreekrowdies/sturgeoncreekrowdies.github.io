@@ -120,11 +120,11 @@ order: 3
 .hof-header h1 {
   font-size: 2.5rem;
   margin-bottom: 10px;
-  color: #333;
+  color: var(--text-color);
 }
 
 .hof-header p {
-  color: #666;
+  color: var(--text-muted);
   font-size: 1.1rem;
 }
 
@@ -136,16 +136,17 @@ order: 3
   margin-bottom: 30px;
   position: sticky;
   top: 60px;
-  background: white;
+  background: var(--bg-color);
   padding: 15px 0;
   z-index: 100;
-  border-bottom: 1px solid #dbdbdb;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .filter-btn {
   padding: 8px 20px;
-  border: 1px solid #dbdbdb;
-  background: white;
+  border: 1px solid var(--border-color);
+  background: var(--btn-bg);
+  color: var(--text-color);
   border-radius: 30px;
   cursor: pointer;
   font-size: 14px;
@@ -153,7 +154,7 @@ order: 3
 }
 
 .filter-btn:hover {
-  background: #f5f5f5;
+  background: var(--hover-bg);
 }
 
 .filter-btn.active {
@@ -174,7 +175,7 @@ order: 3
   overflow: hidden;
   border-radius: 12px;
   cursor: pointer;
-  background: #f5f5f5;
+  background: var(--item-bg);
   text-decoration: none;
   display: flex;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -236,14 +237,14 @@ order: 3
 .no-posts {
   text-align: center;
   padding: 60px;
-  color: #666;
+  color: var(--text-muted);
   font-size: 18px;
 }
 
 .loading {
   text-align: center;
   padding: 40px;
-  color: #666;
+  color: var(--text-muted);
 }
 
 @media (max-width: 768px) {
@@ -260,5 +261,19 @@ order: 3
   .hof-header h1 {
     font-size: 2rem;
   }
+}
+
+/* Dark mode specific overrides */
+html[data-mode="dark"] .filter-btn.active {
+  background: #0095f6;
+  color: white;
+}
+
+html[data-mode="dark"] .hof-overlay {
+  background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+}
+
+html[data-mode="dark"] .hof-item:hover {
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 </style>

@@ -106,16 +106,17 @@ permalink: /photos/
   margin-bottom: 30px;
   position: sticky;
   top: 60px;
-  background: white;
+  background: var(--bg-color);
   padding: 15px 0;
   z-index: 100;
-  border-bottom: 1px solid #dbdbdb;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .filter-btn {
   padding: 8px 20px;
-  border: 1px solid #dbdbdb;
-  background: white;
+  border: 1px solid var(--border-color);
+  background: var(--btn-bg);
+  color: var(--text-color);
   border-radius: 30px;
   cursor: pointer;
   font-size: 14px;
@@ -123,7 +124,7 @@ permalink: /photos/
 }
 
 .filter-btn:hover {
-  background: #f5f5f5;
+  background: var(--hover-bg);
 }
 
 .filter-btn.active {
@@ -144,7 +145,7 @@ permalink: /photos/
   overflow: hidden;
   border-radius: 8px;
   cursor: pointer;
-  background: #f5f5f5;
+  background: var(--item-bg);
 }
 
 .gallery-image {
@@ -190,7 +191,7 @@ permalink: /photos/
 .no-photos {
   text-align: center;
   padding: 60px;
-  color: #666;
+  color: var(--text-muted);
   font-size: 18px;
 }
 
@@ -204,5 +205,15 @@ permalink: /photos/
     padding: 6px 15px;
     font-size: 12px;
   }
+}
+
+/* Dark mode specific overrides if needed */
+html[data-mode="dark"] .filter-btn.active {
+  background: #0095f6;
+  color: white;
+}
+
+html[data-mode="dark"] .gallery-overlay {
+  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
 }
 </style>
