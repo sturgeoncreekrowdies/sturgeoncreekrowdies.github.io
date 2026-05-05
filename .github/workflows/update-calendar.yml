@@ -17,16 +17,16 @@ jobs:
       
       - name: Fetch and parse Google Calendar
         run: |
-          # Google Calendar URL
-          CALENDAR_URL="https://calendar.google.com/calendar/ical/408c54c5483208e82d01dec30a088ede7c00ab95f7ec06abfa371b95cc051b0d%40group.calendar.google.com/public/basic.ics"
+          CALENDAR_URL="https://calendar.google.com/calendar/ical/408c54c5483208e82d01dec30a088ede7c00ab95f7ec06abfa371b95cc051b0d%40group.calendar.google.com/public/basic.ics?singleevents=true"
           
           curl -L "$CALENDAR_URL" -o calendar.ics
-          # echo "Downloaded calendar.ics"
           
           cat > parse_calendar.sh << 'SCRIPT'
           #!/bin/bash
           
           today=$(date +%Y%m%d)
+          
+          mkdir -p _data
           
           echo "[" > _data/calendar.json
           
@@ -37,6 +37,27 @@ jobs:
           
           while IFS= read -r line; do
             if [[ $line == SUMMARY:* ]]; then
+              if [[ -n "$current_title" && -n "$current_date" && -n "$current_date_raw" ]]; then
+                if [[ $current_date_raw -ge $today ]]; then
+                  if [ "$first_event" = true ]; then
+                    first_event=false
+                  else
+                    echo "," >> _data/calendar.json
+                  fi
+                  
+                  escaped_title=$(echo "$current_title" | sed 's/\\/\\\\/g' | sed 's/"/\\"/g')
+                  
+                  echo "  {" >> _data/calendar.json
+                  echo "    \"title\": \"$escaped_title\"," >> _data/calendar.json
+                  echo "    \"date\": \"$current_date\"" >> _data/calendar.json
+                  echo -n "  }" >> _data/calendar.json
+                fi
+                
+                current_title=""
+                current_date=""
+                current_date_raw=""
+              fi
+              
               current_title="${line#SUMMARY:}"
               current_title="${current_title#"${current_title%%[![:space:]]*}"}"
               current_title="${current_title%"${current_title##*[![:space:]]}"}"
@@ -49,38 +70,27 @@ jobs:
               current_date="$month/$day/$year"
               current_date_raw="${year}${month}${day}"
             fi
-            
-            if [[ -n "$current_title" && -n "$current_date" && -n "$current_date_raw" ]]; then
-              if [[ $current_date_raw -ge $today ]]; then
-                if [ "$first_event" = true ]; then
-                  first_event=false
-                else
-                  echo "," >> _data/calendar.json
-                fi
-                
-                escaped_title=$(echo "$current_title" | sed 's/\\/\\\\/g' | sed 's/"/\\"/g')
-                
-                echo "  {" >> _data/calendar.json
-                echo "    \"title\": \"$escaped_title\"," >> _data/calendar.json
-                echo "    \"date\": \"$current_date\"" >> _data/calendar.json
-                echo -n "  }" >> _data/calendar.json
-                
-                # echo " DEBUG $current_title on $current_date"
+          done < calendar.ics
+          
+          if [[ -n "$current_title" && -n "$current_date" && -n "$current_date_raw" ]]; then
+            if [[ $current_date_raw -ge $today ]]; then
+              if [ "$first_event" = true ]; then
+                first_event=false
               else
-                # echo " DEBUG PAST $current_title on $current_date"
+                echo "," >> _data/calendar.json
               fi
               
-              current_title=""
-              current_date=""
-              current_date_raw=""
+              escaped_title=$(echo "$current_title" | sed 's/\\/\\\\/g' | sed 's/"/\\"/g')
+              
+              echo "  {" >> _data/calendar.json
+              echo "    \"title\": \"$escaped_title\"," >> _data/calendar.json
+              echo "    \"date\": \"$current_date\"" >> _data/calendar.json
+              echo -n "  }" >> _data/calendar.json
             fi
-          done < calendar.ics
+          fi
           
           echo "" >> _data/calendar.json
           echo "]" >> _data/calendar.json
-          
-          echo ""
-          # echo "completed pull"
           SCRIPT
           
           chmod +x parse_calendar.sh
@@ -94,11 +104,9 @@ jobs:
           if [ -s _data/calendar.json ]; then
             if grep -q "title" _data/calendar.json; then
               git add _data/calendar.json
-              git diff --quiet && git diff --staged --quiet || (git commit -m "Update calendar events [skip ci]" && git push)
-              # echo "Calendar data updated and pushed"
-            else
-              # echo "No events found in calendar"
+              if ! git diff --cached --quiet; then
+                git commit -m "Update calendar events [skip ci]"
+                git push
+              fi
             fi
-          else
-            # echo "No calendar data generated"
           fi
