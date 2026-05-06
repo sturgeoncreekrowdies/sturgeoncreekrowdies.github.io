@@ -1,27 +1,11 @@
 [
   {
-    "title": "SCR vs Wasps",
-    "date": "05/18/2026"
-  },
-  {
-    "title": "Outdoor Practice",
-    "date": "06/24/2026"
-  },
-  {
-    "title": "SCR vs Brumbies",
-    "date": "08/22/2026"
-  },
-  {
-    "title": "SCR vs Dauphin Mavericks",
-    "date": "07/08/2026"
-  },
-  {
-    "title": "SCR vs Brumbies",
-    "date": "08/15/2026"
-  },
-  {
     "title": "Outdoor Practice",
     "date": "05/11/2026"
+  },
+  {
+    "title": "Outdoor Practice",
+    "date": "05/18/2026"
   },
   {
     "title": "Outdoor Practice",
@@ -32,8 +16,16 @@
     "date": "06/01/2026"
   },
   {
+    "title": "SCR vs Dauphin Mavericks",
+    "date": "06/06/2026"
+  },
+  {
     "title": "Outdoor Practice",
     "date": "06/08/2026"
+  },
+  {
+    "title": "SCR vs Brandon",
+    "date": "06/12/2026"
   },
   {
     "title": "Outdoor Practice",
@@ -44,12 +36,24 @@
     "date": "06/22/2026"
   },
   {
+    "title": "SCR vs Brumbies",
+    "date": "06/24/2026"
+  },
+  {
     "title": "Outdoor Practice",
     "date": "06/29/2026"
   },
   {
+    "title": "SCR vs Assassins",
+    "date": "07/02/2026"
+  },
+  {
     "title": "Outdoor Practice",
     "date": "07/06/2026"
+  },
+  {
+    "title": "SCR vs Brumbies",
+    "date": "07/08/2026"
   },
   {
     "title": "Outdoor Practice",
@@ -60,16 +64,36 @@
     "date": "07/20/2026"
   },
   {
+    "title": "SCR vs Assassins",
+    "date": "07/22/2026"
+  },
+  {
     "title": "Outdoor Practice",
     "date": "07/27/2026"
+  },
+  {
+    "title": "SCR vs Wasps",
+    "date": "07/29/2026"
+  },
+  {
+    "title": "SCR vs Wasps",
+    "date": "08/05/2026"
   },
   {
     "title": "Outdoor Practice",
     "date": "08/10/2026"
   },
   {
+    "title": "SCR vs Brandon",
+    "date": "08/15/2026"
+  },
+  {
     "title": "Outdoor Practice",
     "date": "08/17/2026"
+  },
+  {
+    "title": "SCR vs Dauphin Mavericks",
+    "date": "08/22/2026"
   },
   {
     "title": "Outdoor Practice",
@@ -86,25 +110,5 @@
   {
     "title": "Outdoor Practice",
     "date": "09/14/2026"
-  },
-  {
-    "title": "Outdoor Practice",
-    "date": "06/06/2026"
-  },
-  {
-    "title": "SCR vs Dauphin Mavericks",
-    "date": "07/22/2026"
-  },
-  {
-    "title": "SCR vs Assassins",
-    "date": "06/12/2026"
-  },
-  {
-    "title": "SCR vs Brandon",
-    "date": "07/29/2026"
-  },
-  {
-    "title": "SCR vs Wasps",
-    "date": "07/02/2026"
   }
 ]
